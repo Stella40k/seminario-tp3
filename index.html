@@ -48,9 +48,7 @@ recuperar los datos con json.parse -->
             </div>
 
             <div class="formbold-mb-5">
-              <label for="guest" class="formbold-form-label">
-                Edad
-              </label>
+              <label for="guest" class="formbold-form-label"> Edad </label>
               <input
                 type="number"
                 name="guest"
@@ -174,5 +172,39 @@ recuperar los datos con json.parse -->
         }
       </style>
     </div>
+
+    <script>
+      //primera parte: generar un id
+
+      let miId = localStorage.getItem("id") || "user_" + Math.random();
+      localStorage.setItem("id", miId);
+
+      const formulario = document.querySelector("form");
+
+      //segunda parte: escuchamos cuando se envia el formulario
+      formulario.addEventListener("submit", async (e) => {
+        e.preventDefault(); //evito q la pagina se recarhue al mandar el form
+
+        //capturo los datos del form
+        const datos = {
+          nombre: document.getElementById("Fname").value,
+          apellido: document.getElementById("Lname").value,
+          edad: document.getElementById("guest").value,
+        };
+
+        //tercera parte: request, envio los datos a mi servidor (POST)
+        await fetch("/api/alumnos", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            sesepomelo: miId, //digo quien soy
+          },
+          body: JSON.stringify(datos),
+        });
+
+        alert("Alumno registrado");
+        window.location.reload(); //recargo la pagina para ver los cambios
+      });
+    </script>
   </body>
 </html>
